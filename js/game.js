@@ -46,7 +46,7 @@ function readInput() {
     left:         keys.ArrowLeft  || keys.KeyA,
     right:        keys.ArrowRight || keys.KeyD,
     jumpPressed:  justPressed.Space || justPressed.ArrowUp || justPressed.KeyW,
-    shootPressed: justPressed.KeyZ || justPressed.KeyJ,
+    shootPressed: justPressed.KeyE,
   };
 }
 

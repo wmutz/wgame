@@ -73,7 +73,7 @@ You're an astronaut traveling the galaxy. On each planet you land, dangerous cre
 |---|---|
 | ← → (or A / D) | Move |
 | Space (or ↑ / W) | Jump |
-| Z (or J) | Shoot |
+| E | Shoot |
 | R | Restart current level |
 
 ---
