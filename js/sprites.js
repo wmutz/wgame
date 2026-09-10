@@ -144,6 +144,77 @@ const ICE_CRITTER_SPRITE = {
   ],
 };
 
+// --- Fire imp (16 wide x 16 tall) ---
+// O=orange body  D=dark red outline  Y=yellow eye  K=black pupil
+// R=deep red mouth  F=flame tuft on top
+const FIRE_IMP_SPRITE = {
+  scale: 2,
+  colors: {
+    O: "#ff7a1a",
+    D: "#7a1f0a",
+    Y: "#ffe34a",
+    K: "#0a0a0a",
+    R: "#c81f1f",
+    F: "#ffcf4a",
+  },
+  pixels: [
+    ".....FF...FF....",
+    "....FFFF.FFFF...",
+    "....DDDDDDDD....",
+    "...DOOOOOOOOD...",
+    "..DOOYYOOYYOOD..",
+    "..DOYKYOOYKYOD..",
+    "..DOYYYOOYYYOD..",
+    "..DOOOOOOOOOOD..",
+    "..DOOORRRROOOD..",
+    "..DOOORRRROOOD..",
+    "...DOOOOOOOOD...",
+    "....DDDDDDDD....",
+    "....D.DD.DD.D...",
+    "....D.DD.DD.D...",
+    "....DDD..DDD....",
+    "................",
+  ],
+};
+
+// --- Fire boss (16 wide x 20 tall) — a hulking lava demon ---
+// D=dark red outline  O=orange body  Y=eye glow  K=pupil
+// W=teeth  C=glowing lava crack  H=horn
+const FIRE_BOSS_SPRITE = {
+  scale: 3,
+  colors: {
+    D: "#4a0f08",
+    O: "#e8551a",
+    Y: "#ffe34a",
+    K: "#0a0a0a",
+    W: "#fff0e0",
+    C: "#ffb347",
+    H: "#1a0d05",
+  },
+  pixels: [
+    "...H........H...",
+    "..HH........HH..",
+    ".DDDDDD..DDDDDD.",
+    "DOOOOOODDOOOOOOD",
+    "DOOOOOODDOOOOOOD",
+    "DOYKOOODDOOOKYOD",
+    "DOYKOOODDOOOKYOD",
+    "DOOOOOODDOOOOOOD",
+    "DOOOOOODDOOOOOOD",
+    "DOWWOOODDOOOWWOD",
+    ".DDDDDD..DDDDDD.",
+    "..DOOD....DOOD..",
+    ".DOOOOD..DOOOOD.",
+    "DOOOOOODDOOOOOOD",
+    "DOOCOOODDOOOCOOD",
+    "DOOCOOODDOOOCOOD",
+    "DOOOOOODDOOOOOOD",
+    ".DOOOOD..DOOOOD.",
+    "..D..D....D..D..",
+    ".DD..DD..DD..DD.",
+  ],
+};
+
 // --- Bullet (small laser bolt, 6x4) ---
 const BULLET_SPRITE = {
   scale: 2,

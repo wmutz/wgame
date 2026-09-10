@@ -5,7 +5,10 @@
 // =============================================================
 
 // ---------- PLAYER ----------
-function createPlayer(x, y) {
+function createPlayer(x, y, level) {
+  // A level can override the player's move speed, jump power, and max
+  // health (e.g. the Fire Planet makes the player faster/jumpier/heartier).
+  const maxHealth = (level && level.maxHealth) || PLAYER_MAX_HEALTH;
   return {
     kind: "player",
     x, y,
@@ -14,7 +17,10 @@ function createPlayer(x, y) {
     vx: 0, vy: 0,
     onGround: false,
     facing: 1,           // 1 = right, -1 = left
-    health: PLAYER_MAX_HEALTH,
+    moveSpeed: (level && level.moveSpeed) || MOVE_SPEED,
+    jumpPower: (level && level.jumpPower) || JUMP_POWER,
+    maxHealth,
+    health: maxHealth,
     invincible: 0,       // frames of invincibility after being hit
     shootCooldown: 0,
     alive: true,
@@ -24,29 +30,29 @@ function createPlayer(x, y) {
 function updatePlayer(p, level, input) {
   // --- Horizontal movement ---
   if (level.slippery) {
-    // Ice physics: accelerate toward MOVE_SPEED, glide when no input.
+    // Ice physics: accelerate toward moveSpeed, glide when no input.
     if (input.left) {
       p.vx -= ICE_ACCEL;
-      if (p.vx < -MOVE_SPEED) p.vx = -MOVE_SPEED;
+      if (p.vx < -p.moveSpeed) p.vx = -p.moveSpeed;
       p.facing = -1;
     } else if (input.right) {
       p.vx += ICE_ACCEL;
-      if (p.vx >  MOVE_SPEED) p.vx =  MOVE_SPEED;
+      if (p.vx >  p.moveSpeed) p.vx =  p.moveSpeed;
       p.facing = 1;
     } else {
       p.vx *= ICE_FRICTION;
       if (Math.abs(p.vx) < 0.05) p.vx = 0;
     }
   } else {
-    if (input.left)  { p.vx = -MOVE_SPEED; p.facing = -1; }
-    else if (input.right) { p.vx =  MOVE_SPEED; p.facing =  1; }
+    if (input.left)  { p.vx = -p.moveSpeed; p.facing = -1; }
+    else if (input.right) { p.vx =  p.moveSpeed; p.facing =  1; }
     else p.vx = 0;
   }
 
   // --- Jumping ---
   if (input.jumpPressed && p.onGround) {
     const running = input.left || input.right;
-    p.vy = -(JUMP_POWER + (running ? RUN_JUMP_BOOST : 0));
+    p.vy = -(p.jumpPower + (running ? RUN_JUMP_BOOST : 0));
     p.onGround = false;
   }
 
@@ -93,10 +99,11 @@ function drawPlayer(ctx, p, camera) {
 }
 
 // ---------- ENEMY (per-level sprite) ----------
-function createEnemy(x, y, sprite) {
+function createEnemy(x, y, sprite, health, isBoss) {
   const spr = sprite || ALIEN_SPRITE;
   const w = spriteWidth(spr);
   const h = spriteHeight(spr);
+  const hp = health || 1;
   return {
     kind: "enemy",
     sprite: spr,
@@ -106,7 +113,9 @@ function createEnemy(x, y, sprite) {
     vx: -ENEMY_SPEED,
     vy: 0,
     onGround: false,
-    health: 1,
+    health: hp,
+    maxHealth: hp,
+    isBoss: !!isBoss,
     alive: true,
   };
 }
@@ -138,6 +147,17 @@ function updateEnemy(e, level) {
 
 function drawEnemy(ctx, e, camera) {
   drawSprite(ctx, e.sprite, e.x - camera.x, e.y - camera.y, e.vx > 0);
+  if (e.isBoss) drawBossHealthBar(ctx, e, camera);
+}
+
+function drawBossHealthBar(ctx, e, camera) {
+  const barW = e.w;
+  const x = e.x - camera.x;
+  const y = e.y - camera.y - 14;
+  ctx.fillStyle = "#3a1010";
+  ctx.fillRect(x, y, barW, 8);
+  ctx.fillStyle = "#ff4d2a";
+  ctx.fillRect(x, y, barW * (e.health / e.maxHealth), 8);
 }
 
 // ---------- BULLET ----------

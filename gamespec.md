@@ -32,16 +32,19 @@ You're an astronaut traveling the galaxy. On each planet you land, dangerous cre
 |---|---|---|---|
 | 1 | **Jungle** | Vines, trees, alien creatures | **Shield** (block hits) |
 | 2 | **Desert** | Sand dunes, scavenger aliens | **Homing missile** |
-| 3 | **Ice** *(proposed)* | Frozen tundra, slippery floor | **Dash** (zip across the screen) |
-| 4 | **Robot Factory** *(proposed)* | Mechanical world, source of the high-tech robots | **TBD** *(suggest: Double Jump)* |
-| 5 | **Dark / Scary Planet** | Final boss arena — gets **Nukes** for the fight | Victory |
+| 3 | **Ice** | Frozen tundra, slippery floor | **Dash** (zip across the screen) |
+| 4 | **Fire** | Volcanic wasteland, flat lava-rock ground, guarded by a fire boss | **Double Jump** |
+| 5 | **Dark / Scary Planet** *(proposed)* | Final boss arena — gets **Nukes** for the fight | Victory |
 
-**Enemies:** aliens dominate planets 1–3, high-tech robots take over planet 4, mix of both on planet 5.
+**Enemies:** aliens dominate planets 1–3, fire imps and a fire boss on planet 4, mix of everything on planet 5.
+
+**Fire Planet specifics:** no pits and no floating platforms — just one long stretch of solid
+ground leading to the fire boss. The player is buffed for this planet only (faster move speed,
+higher jump, 5 hearts instead of 3) via the level's `moveSpeed` / `jumpPower` / `maxHealth`
+overrides in `levels.js`.
 
 **Open decisions:**
-- Planets 3 and 4 themes — confirm or change.
-- Planet 4's ability — Double Jump is the strongest fit for a side-scroller; alternatives: bomb (screen-clear), slow-mo, triple-shot.
-- Boss design (HP, attack patterns, arena layout).
+- Planet 5 theme and final-boss design (HP, attack patterns, arena layout).
 
 ---
 
@@ -62,6 +65,7 @@ You're an astronaut traveling the galaxy. On each planet you land, dangerous cre
 - **Combat:** shoot bullets in the direction you're facing. Bullets die on hitting platforms or enemies.
 - **Hazards:** touching an enemy costs 1 heart and applies knockback. Brief invincibility blink after a hit. Falling off the bottom of the level costs 1 heart and respawns at the start.
 - **Enemy AI:** patrol back-and-forth on platforms; turn around at walls and platform edges (no edge falls).
+- **Bosses:** a tougher enemy with several hit points and a health bar shown above it (`isBoss` flag on the level's enemy entry). Same movement/collision as a regular enemy, just harder to kill.
 - **Goal:** reach the goal-rocket at the end of the level.
 - **Win/lose:** banner overlay, `R` restarts.
 
@@ -94,7 +98,7 @@ You're an astronaut traveling the galaxy. On each planet you land, dangerous cre
 
 **Run locally:** `python3 -m http.server 8000` from `/workspaces/wgame/`, then open `http://localhost:8000`.
 
-**Tunable constants** (top of `game.js`): `GRAVITY`, `JUMP_POWER`, `MOVE_SPEED`, `BULLET_SPEED`, `SHOOT_COOLDOWN`, `PLAYER_MAX_HEALTH`, `ENEMY_SPEED`. Perfect for letting the kid tweak feel without touching engine code.
+**Tunable constants** (top of `game.js`): `GRAVITY`, `JUMP_POWER`, `RUN_JUMP_BOOST`, `MOVE_SPEED`, `BULLET_SPEED`, `SHOOT_COOLDOWN`, `PLAYER_MAX_HEALTH`, `ENEMY_SPEED`. Perfect for letting the kid tweak feel without touching engine code. A level in `levels.js` can override `moveSpeed`, `jumpPower`, and `maxHealth` for just that planet (used by the Fire Planet).
 
 ---
 
@@ -115,13 +119,17 @@ You're an astronaut traveling the galaxy. On each planet you land, dangerous cre
   - New ice critter sprite (icy spikes, red mouth).
   - **Slippery-floor physics** — the player accelerates and glides instead of stopping instantly. Tunable via `ICE_ACCEL` and `ICE_FRICTION` in `game.js`.
   - Banner shows the Dash reward.
+- Planet 4 (Fire) playable end-to-end:
+  - Side-scrolling level (3000px wide) that's just one long flat stretch of ground — no pits, no floating platforms.
+  - New fire imp sprite (basic enemy) and a much tougher fire boss sprite with a health bar, guarding the goal.
+  - Player is buffed for this planet: faster move speed, higher jump, 5 hearts.
+  - Banner shows the Double Jump reward.
 
 ### 🔜 Next up
-1. **Tune planets 1 → 3** — jump feel, ice friction, enemy placement, anything that doesn't feel right.
-2. **Add the abilities system** — shield first, then homing missile, then dash, unlocked as levels progress.
-3. **Build planet 4 (Robot Factory)** — robot enemies, new ability (likely Double Jump).
-4. **Planet 5** with the boss fight — distinct from levels 1–4 (single arena, multi-phase HP, requires nukes).
-5. **Polish:** title screen, planet-select / star map, sound effects, music, save progress between sessions.
+1. **Tune planets 1 → 4** — jump feel, ice friction, fire boss difficulty, enemy placement, anything that doesn't feel right.
+2. **Add the abilities system** — shield first, then homing missile, then dash, then double jump, unlocked as levels progress.
+3. **Build planet 5** — the final dark/scary planet with the true final boss (single arena, multi-phase HP, requires nukes).
+4. **Polish:** title screen, planet-select / star map, sound effects, music, save progress between sessions.
 
 ---
 

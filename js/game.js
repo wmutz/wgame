@@ -54,8 +54,9 @@ function readInput() {
 // ---------- LEVEL SETUP ----------
 function startLevel(level) {
   currentLevel = level;
-  player = createPlayer(level.playerStart.x, level.playerStart.y);
-  enemies = level.enemies.map(e => createEnemy(e.x, e.y, level.enemySprite));
+  player = createPlayer(level.playerStart.x, level.playerStart.y, level);
+  enemies = level.enemies.map(e =>
+    createEnemy(e.x, e.y, e.sprite || level.enemySprite, e.health, e.boss));
   bullets = [];
   camera.x = 0;
   camera.y = 0;
@@ -333,7 +334,7 @@ function drawPlatforms() {
 
 function drawHUD() {
   // Health hearts (drawn as small red squares for now).
-  for (let i = 0; i < PLAYER_MAX_HEALTH; i++) {
+  for (let i = 0; i < player.maxHealth; i++) {
     const filled = i < player.health;
     ctx.fillStyle = filled ? "#ff4d6d" : "#3a2030";
     ctx.fillRect(20 + i * 28, 20, 22, 22);

@@ -238,4 +238,45 @@ const LEVELS = [
     // What you get for completing this planet.
     reward: "Dash",
   },
+
+  // ----- LEVEL 4: FIRE PLANET -----
+  {
+    name: "Fire Planet",
+    width: 3000,
+    height: 600,
+    skyColor: "#3a0f0f",  // smoldering dusk
+    fogColor: "#7a1f0f",  // distant lava glow
+    groundColor: "#2a1810", // charred rock
+    groundEdge:  "#ff6a2a", // glowing lava edge
+    enemySprite: FIRE_IMP_SPRITE,
+    playerStart: { x: 60, y: 400 },
+
+    // Player is buffed on this planet: faster, jumps higher, more hearts.
+    // (Normal defaults, set in game.js, are moveSpeed 4 and jumpPower 13.)
+    moveSpeed: 5.5,
+    jumpPower: 15,
+    maxHealth: 5,
+
+    // No pits, no floating platforms — just one long stretch of solid
+    // ground leading to the boss.
+    platforms: [
+      { x: 0, y: 540, w: 3000, h: 60 },
+    ],
+
+    // A few fire imps along the way, then the fire boss guarding the goal.
+    enemies: [
+      { x: 500,  y: 540 },
+      { x: 900,  y: 540 },
+      { x: 1300, y: 540 },
+      { x: 1700, y: 540 },
+      { x: 2100, y: 540 },
+      { x: 2560, y: 540, sprite: FIRE_BOSS_SPRITE, health: 12, boss: true },
+    ],
+
+    // Where the goal is. Touching it finishes the level.
+    goal: { x: 2880, y: 480 },
+
+    // What you get for completing this planet.
+    reward: "Double Jump",
+  },
 ];
