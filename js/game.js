@@ -6,6 +6,7 @@
 // Change these to make the game feel different!
 const GRAVITY           = 0.6;   // how fast you fall
 const JUMP_POWER        = 13;    // how high you jump (bigger = higher)
+const RUN_JUMP_BOOST    = 1.5;   // extra jump power when holding left/right (jump a bit farther while running)
 const MOVE_SPEED        = 4;     // how fast you run
 const BULLET_SPEED      = 9;     // how fast bullets fly
 const SHOOT_COOLDOWN    = 14;    // frames between shots (60 = 1 sec)

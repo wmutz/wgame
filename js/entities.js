@@ -45,7 +45,8 @@ function updatePlayer(p, level, input) {
 
   // --- Jumping ---
   if (input.jumpPressed && p.onGround) {
-    p.vy = -JUMP_POWER;
+    const running = input.left || input.right;
+    p.vy = -(JUMP_POWER + (running ? RUN_JUMP_BOOST : 0));
     p.onGround = false;
   }
 
