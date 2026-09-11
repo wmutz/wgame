@@ -14,6 +14,7 @@ const PLAYER_MAX_HEALTH = 3;
 const ENEMY_SPEED       = 1.4;
 const ICE_ACCEL         = 0.4;   // how quickly you build speed on ice
 const ICE_FRICTION      = 0.92;  // how quickly you stop on ice (1 = never)
+const CUTSCENE_DURATION = 300;   // frames the fly-to-next-planet cutscene lasts (5 sec at 60fps)
 
 // ---------- GLOBAL STATE ----------
 const canvas = document.getElementById("game");
@@ -25,8 +26,10 @@ let enemies = [];
 let bullets = [];
 let camera = { x: 0, y: 0 };
 let currentLevel = LEVELS[0];
-let gameState = "playing"; // "playing" | "won" | "lost"
+let gameState = "playing"; // "playing" | "won" | "lost" | "cutscene"
 let frameCount = 0;
+let cutsceneNext = null;   // the level the cutscene is flying us to
+let cutsceneTimer = 0;     // frames left in the current cutscene
 
 // ---------- INPUT ----------
 const keys = {};
@@ -65,71 +68,82 @@ function startLevel(level) {
 
 function nextLevel() {
   const i = LEVELS.indexOf(currentLevel);
-  if (i >= 0 && i < LEVELS.length - 1) startLevel(LEVELS[i + 1]);
-  else startLevel(currentLevel);
+  if (i >= 0 && i < LEVELS.length - 1) {
+    // Fly to the next planet with a short cutscene instead of cutting straight there.
+    cutsceneNext = LEVELS[i + 1];
+    cutsceneTimer = CUTSCENE_DURATION;
+    gameState = "cutscene";
+  } else {
+    startLevel(currentLevel);
+  }
 }
 
 // ---------- MAIN LOOP ----------
 function update() {
   frameCount++;
 
-  if (gameState !== "playing") {
+  if (gameState === "cutscene") {
+    cutsceneTimer--;
+    if (cutsceneTimer <= 0) startLevel(cutsceneNext);
+  } else if (gameState !== "playing") {
     if (justPressed.KeyR) {
       if (gameState === "won") nextLevel();
       else startLevel(currentLevel);
     }
-    return;
-  }
+  } else {
+    const input = readInput();
+    updatePlayer(player, currentLevel, input);
 
-  const input = readInput();
-  updatePlayer(player, currentLevel, input);
+    for (const e of enemies) if (e.alive) updateEnemy(e, currentLevel, player);
+    for (const b of bullets) if (b.alive) updateBullet(b, currentLevel);
 
-  for (const e of enemies) if (e.alive) updateEnemy(e, currentLevel, player);
-  for (const b of bullets) if (b.alive) updateBullet(b, currentLevel);
-
-  // Bullet vs enemy
-  for (const b of bullets) {
-    if (!b.alive) continue;
-    for (const e of enemies) {
-      if (!e.alive) continue;
-      if (rectsOverlap(b, e)) {
-        e.health--;
-        if (e.health <= 0) e.alive = false;
-        b.alive = false;
-        break;
+    // Bullet vs enemy
+    for (const b of bullets) {
+      if (!b.alive) continue;
+      for (const e of enemies) {
+        if (!e.alive) continue;
+        if (rectsOverlap(b, e)) {
+          e.health--;
+          if (e.health <= 0) e.alive = false;
+          b.alive = false;
+          break;
+        }
       }
     }
-  }
 
-  // Player vs enemy (touch = take damage)
-  for (const e of enemies) {
-    if (!e.alive) continue;
-    if (rectsOverlap(player, e)) {
-      hurtPlayer(player, 1);
-      // Knockback
-      player.vx = (player.x < e.x ? -1 : 1) * 6;
-      player.vy = -7;
+    // Player vs enemy (touch = take damage)
+    for (const e of enemies) {
+      if (!e.alive) continue;
+      if (rectsOverlap(player, e)) {
+        hurtPlayer(player, 1);
+        // Knockback
+        player.vx = (player.x < e.x ? -1 : 1) * 6;
+        player.vy = -7;
+      }
     }
+
+    // Player vs goal (bosses must be defeated first)
+    const goalRect = goalHitbox(currentLevel);
+    const bossAlive = enemies.some(e => e.isBoss && e.alive);
+    if (rectsOverlap(player, goalRect) && !bossAlive) gameState = "won";
+
+    if (!player.alive) gameState = "lost";
+
+    // Restart key always works
+    if (justPressed.KeyR) startLevel(currentLevel);
+
+    // Camera follows the player, clamped to the level edges.
+    const targetX = player.x + player.w / 2 - canvas.width / 2;
+    camera.x = Math.max(0, Math.min(targetX, currentLevel.width - canvas.width));
+    camera.y = 0;
+
+    // Clean up dead things.
+    enemies = enemies.filter(e => e.alive);
+    bullets = bullets.filter(b => b.alive);
   }
 
-  // Player vs goal (bosses must be defeated first)
-  const goalRect = goalHitbox(currentLevel);
-  const bossAlive = enemies.some(e => e.isBoss && e.alive);
-  if (rectsOverlap(player, goalRect) && !bossAlive) gameState = "won";
-
-  if (!player.alive) gameState = "lost";
-
-  // Restart key always works
-  if (justPressed.KeyR) startLevel(currentLevel);
-
-  // Camera follows the player, clamped to the level edges.
-  const targetX = player.x + player.w / 2 - canvas.width / 2;
-  camera.x = Math.max(0, Math.min(targetX, currentLevel.width - canvas.width));
-  camera.y = 0;
-
-  // Clean up dead things and clear the just-pressed buffer for next frame.
-  enemies = enemies.filter(e => e.alive);
-  bullets = bullets.filter(b => b.alive);
+  // Clear the just-pressed buffer for next frame (every state, so a key
+  // press doesn't linger stale across a state change, e.g. into a cutscene).
   for (const k in justPressed) delete justPressed[k];
 }
 
@@ -144,6 +158,10 @@ function goalHitbox(level) {
 
 // ---------- DRAWING ----------
 function draw() {
+  if (gameState === "cutscene") {
+    drawCutscene();
+    return;
+  }
   drawBackground();
   drawMountains();
   drawDunes();
@@ -370,6 +388,116 @@ function drawBanner(title, subtitle, color, hint) {
   ctx.fillStyle = "#a0a0b8";
   ctx.fillText(hint || "Press R to restart", canvas.width / 2, 350);
   ctx.textAlign = "left";
+}
+
+// ---------- CUTSCENE (flying to the next planet) ----------
+function drawCutscene() {
+  const elapsed = CUTSCENE_DURATION - cutsceneTimer;
+  const progress = elapsed / CUTSCENE_DURATION; // 0 (start) -> 1 (arriving)
+
+  // Deep-space gradient.
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, "#05020f");
+  grad.addColorStop(1, "#160a2e");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Streaking stars rushing past, for a sense of speed.
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 70; i++) {
+    const seedX = (i * 137) % canvas.width;
+    const seedY = (i * 71) % canvas.height;
+    const speed = 6 + (i % 5) * 3;
+    const len = 16 + (i % 4) * 10;
+    let x = (seedX - elapsed * speed) % (canvas.width + len);
+    if (x < -len) x += canvas.width + len;
+    ctx.beginPath();
+    ctx.moveTo(x, seedY);
+    ctx.lineTo(x + len, seedY);
+    ctx.stroke();
+  }
+
+  // The planet we left, shrinking away in the corner.
+  const originR = Math.max(0, 60 * (1 - progress));
+  if (originR > 0) {
+    ctx.fillStyle = currentLevel.groundColor;
+    ctx.beginPath();
+    ctx.arc(70, 90, originR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // The destination planet, growing as we approach.
+  const destR = 16 + 90 * progress;
+  ctx.fillStyle = cutsceneNext.groundColor;
+  ctx.beginPath();
+  ctx.arc(canvas.width - 90, canvas.height - 110, destR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = cutsceneNext.groundEdge;
+  ctx.beginPath();
+  ctx.arc(canvas.width - 90 - destR * 0.3, canvas.height - 110 - destR * 0.3, destR * 0.35, 0, Math.PI * 2);
+  ctx.fill();
+
+  // The rocket ship, bobbing gently as it flies.
+  const bob = Math.sin(frameCount * 0.12) * 8;
+  drawRocketShip(canvas.width / 2 - 20, canvas.height / 2 - 50 + bob);
+
+  // Text.
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 28px system-ui, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("Blasting off to " + cutsceneNext.name + "...", canvas.width / 2, 70);
+  ctx.font = "16px system-ui, sans-serif";
+  ctx.fillStyle = "#a0a0c8";
+  const secondsLeft = Math.max(1, Math.ceil(cutsceneTimer / 60));
+  ctx.fillText(secondsLeft + "...", canvas.width / 2, canvas.height - 40);
+  ctx.textAlign = "left";
+}
+
+function drawRocketShip(x, y) {
+  // Flickering engine flame.
+  const flicker = 10 + Math.sin(frameCount * 0.8) * 4;
+  ctx.fillStyle = "#ffb347";
+  ctx.beginPath();
+  ctx.moveTo(x, y + 70);
+  ctx.lineTo(x + 20, y + 70 + flicker);
+  ctx.lineTo(x + 40, y + 70);
+  ctx.closePath();
+  ctx.fill();
+
+  // Body.
+  ctx.fillStyle = "#e8e8f0";
+  ctx.beginPath();
+  ctx.moveTo(x + 20, y);
+  ctx.lineTo(x + 40, y + 70);
+  ctx.lineTo(x, y + 70);
+  ctx.closePath();
+  ctx.fill();
+
+  // Fins.
+  ctx.fillStyle = "#d63a3a";
+  ctx.beginPath();
+  ctx.moveTo(x, y + 50);
+  ctx.lineTo(x - 14, y + 70);
+  ctx.lineTo(x, y + 70);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x + 40, y + 50);
+  ctx.lineTo(x + 54, y + 70);
+  ctx.lineTo(x + 40, y + 70);
+  ctx.closePath();
+  ctx.fill();
+
+  // Window with the player's helmet visor peeking out.
+  ctx.fillStyle = "#a4a8b8";
+  ctx.beginPath();
+  ctx.arc(x + 20, y + 30, 11, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#1d3f7a";
+  ctx.beginPath();
+  ctx.arc(x + 20, y + 30, 8, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 // ---------- BOOT ----------

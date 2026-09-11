@@ -68,6 +68,7 @@ overrides in `levels.js`.
 - **Bosses:** a tougher enemy with several hit points and a health bar shown above it (`isBoss` flag on the level's enemy entry). Same movement/collision as a regular enemy, just harder to kill.
 - **Goal:** reach the goal-rocket at the end of the level.
 - **Win/lose:** banner overlay, `R` restarts.
+- **Cutscene:** completing a level (and pressing `R`) plays a 5-second "flying to the next planet" cutscene — starfield, shrinking origin planet, growing destination planet, player's rocket ship — before the next level starts.
 
 ---
 
