@@ -84,7 +84,7 @@ function update() {
   const input = readInput();
   updatePlayer(player, currentLevel, input);
 
-  for (const e of enemies) if (e.alive) updateEnemy(e, currentLevel);
+  for (const e of enemies) if (e.alive) updateEnemy(e, currentLevel, player);
   for (const b of bullets) if (b.alive) updateBullet(b, currentLevel);
 
   // Bullet vs enemy
@@ -112,9 +112,10 @@ function update() {
     }
   }
 
-  // Player vs goal
+  // Player vs goal (bosses must be defeated first)
   const goalRect = goalHitbox(currentLevel);
-  if (rectsOverlap(player, goalRect)) gameState = "won";
+  const bossAlive = enemies.some(e => e.isBoss && e.alive);
+  if (rectsOverlap(player, goalRect) && !bossAlive) gameState = "won";
 
   if (!player.alive) gameState = "lost";
 
@@ -347,6 +348,11 @@ function drawHUD() {
   ctx.font = "bold 18px system-ui, sans-serif";
   ctx.textAlign = "right";
   ctx.fillText(currentLevel.name, canvas.width - 20, 36);
+  if (enemies.some(e => e.isBoss && e.alive)) {
+    ctx.fillStyle = "#ffb347";
+    ctx.font = "14px system-ui, sans-serif";
+    ctx.fillText("Defeat the boss to proceed!", canvas.width - 20, 58);
+  }
   ctx.textAlign = "left";
 }
 

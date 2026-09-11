@@ -120,19 +120,20 @@ function createEnemy(x, y, sprite, health, isBoss) {
   };
 }
 
-function updateEnemy(e, level) {
+function updateEnemy(e, level, player) {
   // Gravity
   e.vy += GRAVITY;
   if (e.vy > 16) e.vy = 16;
 
-  // Move and collide. If we hit a wall, turn around.
-  const before = e.vx;
-  moveAndCollide(e, level.platforms);
-  if (e.vx === 0 && before !== 0) e.vx = -before;
+  // Chase the player: move toward whichever side they're on.
+  let desiredVx = 0;
+  if (player && player.alive) {
+    desiredVx = (player.x + player.w / 2 > e.x + e.w / 2) ? ENEMY_SPEED : -ENEMY_SPEED;
+  }
 
-  // Don't walk off the edge: peek ahead at our feet.
-  if (e.onGround) {
-    const probeX = e.vx > 0 ? e.x + e.w + 2 : e.x - 2;
+  // Don't chase off a platform edge: peek ahead at our feet before moving.
+  if (e.onGround && desiredVx !== 0) {
+    const probeX = desiredVx > 0 ? e.x + e.w + 2 : e.x - 2;
     const probeY = e.y + e.h + 2;
     let groundAhead = false;
     for (const plat of level.platforms) {
@@ -141,8 +142,11 @@ function updateEnemy(e, level) {
         groundAhead = true; break;
       }
     }
-    if (!groundAhead) e.vx = -e.vx;
+    if (!groundAhead) desiredVx = 0;
   }
+  e.vx = desiredVx;
+
+  moveAndCollide(e, level.platforms);
 }
 
 function drawEnemy(ctx, e, camera) {
