@@ -242,6 +242,7 @@ const LEVELS = [
   // ----- LEVEL 4: FIRE PLANET -----
   {
     name: "Fire Planet",
+    victoryLevel: true, // shows "VICTORY!" instead of "LEVEL COMPLETE!" on the win banner
     width: 3000,
     height: 600,
     skyColor: "#3a0f0f",  // smoldering dusk

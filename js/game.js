@@ -161,7 +161,8 @@ function draw() {
     const i = LEVELS.indexOf(currentLevel);
     const isLast = i === LEVELS.length - 1;
     const hint = isLast ? "Press R to play again" : "Press R for the next planet";
-    drawBanner("LEVEL COMPLETE!", "You earned: " + currentLevel.reward, "#7afc7a", hint);
+    const title = currentLevel.victoryLevel ? "VICTORY!" : "LEVEL COMPLETE!";
+    drawBanner(title, "You earned: " + currentLevel.reward, "#7afc7a", hint);
   }
   if (gameState === "lost") drawBanner("GAME OVER", "Press R to try again", "#ff6a6a", "Press R to restart");
 }
