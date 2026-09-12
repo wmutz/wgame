@@ -177,10 +177,10 @@ const FIRE_IMP_SPRITE = {
   ],
 };
 
-// --- Fire boss (40 wide x 29 tall) — a levitating fire spirit. The head ---
+// --- Fire boss (40 wide x 33 tall) — a levitating fire spirit. The head ---
 // --- is FIRE_IMP_SPRITE's own 16-wide grid used as-is: since this sprite ---
 // --- runs at scale 4 vs the imp's scale 2, it renders exactly 2x the     ---
-// --- imp's size. Thin torso, muscular bulging arms, no legs.            ---
+// --- imp's size. Much thinner torso, long muscular arms, no legs.       ---
 // D=dark outline  O=fire-orange skin/body  Y=eye  K=pupil/claws  R=mouth/hover-trail
 // A=arm  B=bicep highlight  C=glowing chest crack  F=flame tuft
 const FIRE_BOSS_SPRITE = {
@@ -209,23 +209,27 @@ const FIRE_BOSS_SPRITE = {
     "..............DOOORRRROOOD..............",
     "...............DOOOOOOOOD...............",
     "................DDDDDDDD................",
-    "..........DDDOOOOOOOOOOOOOODDD..........",
-    ".........DDOOOOOOOOOOOOOOOOOODD.........",
-    ".........DDOOOOOOOOOOOOOOOOOODD.........",
-    "........DDOOOOOOOOOOOOOOOOOOOODD........",
-    ".DDBBBBBBBDDOOOOOOOOOOOOOOOODDBBBBBBBDD.",
-    "DDAAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAAADD",
-    "DDAAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAAADD",
-    ".DDAAAAAADDDOOOOOOOOOOOOOOOODDDAAAAAADD.",
-    "..DDAAAAADDDOOOOOOOOOOOOOOOODDDAAAAADD..",
-    "..KKAAAAADDDOOOOOOOOOOOOOOOODDDAAAAAKK..",
-    "...DDKKKDDDDOOOOOOOOOOOOOOOODDDDKKKDD...",
+    ".............DDOOOOOOOOOODD.............",
+    "............DDOOOOOOOOOOOODD............",
+    "...........DDOOOOOOOOOOOOOODD...........",
     "..........DDOOOOOOOOOOOOOOOODD..........",
-    "..........OOOCCOOOOOOOOOOCCOOO..........",
-    "..........OOOCCOOOOOOOOOOCCOOO..........",
-    "..........OOOOOOOOOOOOOOOOOOOO..........",
-    "...........DDDDDDDDDDDDDDDDDD...........",
-    "............AAAAAAAAAAAAAAAA............",
+    "..DDBBBBBBBDDDDOOOOOOOOOODDDDBBBBBBBDD..",
+    ".DDAAAAAAAADDDDOOOOOOOOOODDDDAAAAAAAADD.",
+    ".DDAAAAAAAADDDDOOOOOOOOOODDDDAAAAAAAADD.",
+    "..DDAAAAAADDDDDOOOOOOOOOODDDDDAAAAAADD..",
+    "...DDAAAADDDDDDOOOOOOOOOODDDDDDAAAADD...",
+    "...DDAAAADDDDDDOOOOOOOOOODDDDDDAAAADD...",
+    "...DDAAAADDDDDDOOOOOOOOOODDDDDDAAAADD...",
+    "...DDAAAADDDDDDOOOOOOOOOODDDDDDAAAADD...",
+    "...DDAAAADDDDDDOOOOOOOOOODDDDDDAAAADD...",
+    "...KKAAAADDDDDDOOOOOOOOOODDDDDDAAAAKK...",
+    "....DDKKDDDDDDDOOOOOOOOOODDDDDDDKKDD....",
+    "..............DOOOOOOOOOOD..............",
+    "..............OOCOOOOOOCOO..............",
+    "..............OOCOOOOOOCOO..............",
+    "..............OOOOOOOOOOOO..............",
+    "...............DDDDDDDDDD...............",
+    "................AAAAAAAA................",
   ],
 };
 
