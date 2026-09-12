@@ -177,11 +177,12 @@ const FIRE_IMP_SPRITE = {
   ],
 };
 
-// --- Fire boss (40 wide x 40 tall) — a levitating fire spirit. The head is ---
-// --- a literal 2x scale-up of FIRE_IMP_SPRITE's own face (same shape and  ---
-// --- proportions), on a thinner torso with much bigger arms and no legs. ---
+// --- Fire boss (40 wide x 29 tall) — a levitating fire spirit. The head ---
+// --- is FIRE_IMP_SPRITE's own 16-wide grid used as-is: since this sprite ---
+// --- runs at scale 4 vs the imp's scale 2, it renders exactly 2x the     ---
+// --- imp's size. Thin torso, muscular bulging arms, no legs.            ---
 // D=dark outline  O=fire-orange skin/body  Y=eye  K=pupil/claws  R=mouth/hover-trail
-// A=big arm  C=glowing chest crack  F=flame tuft
+// A=arm  B=bicep highlight  C=glowing chest crack  F=flame tuft
 const FIRE_BOSS_SPRITE = {
   scale: 4,
   colors: {
@@ -191,44 +192,34 @@ const FIRE_BOSS_SPRITE = {
     K: "#0a0a0a",
     R: "#b8241a",
     A: "#c8431a",
+    B: "#ff8a4a",
     C: "#ffb347",
     F: "#ffcf4a",
   },
   pixels: [
-    "..............FFFF......FFFF............",
-    "..............FFFF......FFFF............",
-    "............FFFFFFFF..FFFFFFFF..........",
-    "............FFFFFFFF..FFFFFFFF..........",
-    "............DDDDDDDDDDDDDDDD............",
-    "............DDDDDDDDDDDDDDDD............",
-    "..........DDOOOOOOOOOOOOOOOODD..........",
-    "..........DDOOOOOOOOOOOOOOOODD..........",
-    "........DDOOOOYYYYOOOOYYYYOOOODD........",
-    "........DDOOOOYYYYOOOOYYYYOOOODD........",
-    "........DDOOYYKKYYOOOOYYKKYYOODD........",
-    "........DDOOYYKKYYOOOOYYKKYYOODD........",
-    "........DDOOYYYYYYOOOOYYYYYYOODD........",
-    "........DDOOYYYYYYOOOOYYYYYYOODD........",
-    "........DDOOOOOOOOOOOOOOOOOOOODD........",
-    "........DDOOOOOOOOOOOOOOOOOOOODD........",
-    "........DDOOOOOORRRRRRRROOOOOODD........",
-    "........DDOOOOOORRRRRRRROOOOOODD........",
-    "........DDOOOOOORRRRRRRROOOOOODD........",
-    "........DDOOOOOORRRRRRRROOOOOODD........",
-    "..........DDOOOOOOOOOOOOOOOODD..........",
-    "..........DDOOOOOOOOOOOOOOOODD..........",
-    "............DDDDDDDDDDDDDDDD............",
-    "............DDDDDDDDDDDDDDDD............",
+    ".................FF...FF................",
+    "................FFFF.FFFF...............",
+    "................DDDDDDDD................",
+    "...............DOOOOOOOOD...............",
+    "..............DOOYYOOYYOOD..............",
+    "..............DOYKYOOYKYOD..............",
+    "..............DOYYYOOYYYOD..............",
+    "..............DOOOOOOOOOOD..............",
+    "..............DOOORRRROOOD..............",
+    "..............DOOORRRROOOD..............",
+    "...............DOOOOOOOOD...............",
+    "................DDDDDDDD................",
     "..........DDDOOOOOOOOOOOOOODDD..........",
     ".........DDOOOOOOOOOOOOOOOOOODD.........",
-    "...........DDOOOOOOOOOOOOOODD...........",
-    "..........DDOOOOOOOOOOOOOOOODD..........",
-    "..DDAAAAAADDOOOOOOOOOOOOOOOODDAAAAAADD..",
-    ".DDAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAADD.",
-    ".DDAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAADD.",
-    ".DDAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAADD.",
-    "..KKAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAKK..",
-    "...DDKKKKDDDOOOOOOOOOOOOOOOODDDKKKKDD...",
+    ".........DDOOOOOOOOOOOOOOOOOODD.........",
+    "........DDOOOOOOOOOOOOOOOOOOOODD........",
+    ".DDBBBBBBBDDOOOOOOOOOOOOOOOODDBBBBBBBDD.",
+    "DDAAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAAADD",
+    "DDAAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAAADD",
+    ".DDAAAAAADDDOOOOOOOOOOOOOOOODDDAAAAAADD.",
+    "..DDAAAAADDDOOOOOOOOOOOOOOOODDDAAAAADD..",
+    "..KKAAAAADDDOOOOOOOOOOOOOOOODDDAAAAAKK..",
+    "...DDKKKDDDDOOOOOOOOOOOOOOOODDDDKKKDD...",
     "..........DDOOOOOOOOOOOOOOOODD..........",
     "..........OOOCCOOOOOOOOOOCCOOO..........",
     "..........OOOCCOOOOOOOOOOCCOOO..........",
