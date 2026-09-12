@@ -59,7 +59,7 @@ function startLevel(level) {
   currentLevel = level;
   player = createPlayer(level.playerStart.x, level.playerStart.y, level);
   enemies = level.enemies.map(e =>
-    createEnemy(e.x, e.y, e.sprite || level.enemySprite, e.health, e.boss));
+    createEnemy(e.x, e.y, e.sprite || level.enemySprite, e.health, e.boss, e.speed));
   bullets = [];
   camera.x = 0;
   camera.y = 0;

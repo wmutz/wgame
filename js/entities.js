@@ -99,23 +99,25 @@ function drawPlayer(ctx, p, camera) {
 }
 
 // ---------- ENEMY (per-level sprite) ----------
-function createEnemy(x, y, sprite, health, isBoss) {
+function createEnemy(x, y, sprite, health, isBoss, speed) {
   const spr = sprite || ALIEN_SPRITE;
   const w = spriteWidth(spr);
   const h = spriteHeight(spr);
   const hp = health || 1;
+  const spd = speed || ENEMY_SPEED;
   return {
     kind: "enemy",
     sprite: spr,
     x: x - w / 2,            // x in level data is the center
     y: y - h,                // y is the feet, so subtract height
     w, h,
-    vx: -ENEMY_SPEED,
+    vx: -spd,
     vy: 0,
     onGround: false,
     health: hp,
     maxHealth: hp,
     isBoss: !!isBoss,
+    speed: spd,
     alive: true,
   };
 }
@@ -128,7 +130,7 @@ function updateEnemy(e, level, player) {
   // Chase the player: move toward whichever side they're on.
   let desiredVx = 0;
   if (player && player.alive) {
-    desiredVx = (player.x + player.w / 2 > e.x + e.w / 2) ? ENEMY_SPEED : -ENEMY_SPEED;
+    desiredVx = (player.x + player.w / 2 > e.x + e.w / 2) ? e.speed : -e.speed;
   }
 
   // Don't chase off a platform edge: peek ahead at our feet before moving.
