@@ -271,7 +271,7 @@ const LEVELS = [
       { x: 1300, y: 540 },
       { x: 1700, y: 540 },
       { x: 2100, y: 540 },
-      { x: 2560, y: 540, sprite: FIRE_BOSS_SPRITE, health: 12, boss: true },
+      { x: 2560, y: 540, sprite: FIRE_BOSS_SPRITE, health: 20, boss: true },
     ],
 
     // Where the goal is. Touching it finishes the level.
