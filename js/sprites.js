@@ -177,11 +177,11 @@ const FIRE_IMP_SPRITE = {
   ],
 };
 
-// --- Fire boss (40 wide x 28 tall) — a levitating fire spirit whose face ---
-// --- matches its own fire-imp minions: orange skin, flat yellow block   ---
-// --- eyes with black pupils, a solid red mouth, a flame tuft on top.    ---
-// D=dark outline  O=fire-orange skin/body  Y=eye  K=pupil  R=mouth/hover-trail
-// A=stubby arm  C=glowing chest crack  F=flame tuft
+// --- Fire boss (40 wide x 40 tall) — a levitating fire spirit. The head is ---
+// --- a literal 2x scale-up of FIRE_IMP_SPRITE's own face (same shape and  ---
+// --- proportions), on a thinner torso with much bigger arms and no legs. ---
+// D=dark outline  O=fire-orange skin/body  Y=eye  K=pupil/claws  R=mouth/hover-trail
+// A=big arm  C=glowing chest crack  F=flame tuft
 const FIRE_BOSS_SPRITE = {
   scale: 4,
   colors: {
@@ -195,34 +195,46 @@ const FIRE_BOSS_SPRITE = {
     F: "#ffcf4a",
   },
   pixels: [
-    "...FFF............................FFF...",
-    "..FFFFF..........................FFFFF..",
-    ".......DDDDDDDDDDDDDDDDDDDDDDDDDD.......",
-    ".....DDOOOOOOOOOOOOOOOOOOOOOOOOOODD.....",
-    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
-    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
-    "....DOOOOOYYYYYYYYOOOOYYYYYYYYOOOOOD....",
-    "....DOOOOOYYYKKYYYOOOOYYYKKYYYOOOOOD....",
-    "....DOOOOOYYYYYYYYOOOOYYYYYYYYOOOOOD....",
-    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
-    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
-    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
-    "....DOOOOOOOORRRRRRRRRRRRRROOOOOOOOD....",
-    "....DOOOOOOOORRRRRRRRRRRRRROOOOOOOOD....",
-    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
-    "......DDDDDDDDDDDDDDDDDDDDDDDDDDDD......",
-    ".........DDDDOOOOOOOOOOOOOODDDD.........",
-    "........DDDOOOOOOOOOOOOOOOOOODDD........",
-    ".........DDOOOOOOOOOOOOOOOOOODD.........",
+    "..............FFFF......FFFF............",
+    "..............FFFF......FFFF............",
+    "............FFFFFFFF..FFFFFFFF..........",
+    "............FFFFFFFF..FFFFFFFF..........",
+    "............DDDDDDDDDDDDDDDD............",
+    "............DDDDDDDDDDDDDDDD............",
+    "..........DDOOOOOOOOOOOOOOOODD..........",
+    "..........DDOOOOOOOOOOOOOOOODD..........",
+    "........DDOOOOYYYYOOOOYYYYOOOODD........",
+    "........DDOOOOYYYYOOOOYYYYOOOODD........",
+    "........DDOOYYKKYYOOOOYYKKYYOODD........",
+    "........DDOOYYKKYYOOOOYYKKYYOODD........",
+    "........DDOOYYYYYYOOOOYYYYYYOODD........",
+    "........DDOOYYYYYYOOOOYYYYYYOODD........",
     "........DDOOOOOOOOOOOOOOOOOOOODD........",
-    "...DAAADDOOOOOOOOOOOOOOOOOOOOOODDAAAD...",
-    "...DAAADDOOOOOOOOOOOOOOOOOOOOOODDAAAD...",
-    "........DOOOOOOOOOOOOOOOOOOOOOOD........",
-    "........DOOOCCOOOOOOOOOOOOCCOOOD........",
-    "........DOOOCCOOOOOOOOOOOOCCOOOD........",
-    "........OOOOOOOOOOOOOOOOOOOOOOOO........",
-    ".........DDDDDDDDDD..DDDDDDDDDD.........",
-    "..........AAAAAAAA....AAAAAAAA..........",
+    "........DDOOOOOOOOOOOOOOOOOOOODD........",
+    "........DDOOOOOORRRRRRRROOOOOODD........",
+    "........DDOOOOOORRRRRRRROOOOOODD........",
+    "........DDOOOOOORRRRRRRROOOOOODD........",
+    "........DDOOOOOORRRRRRRROOOOOODD........",
+    "..........DDOOOOOOOOOOOOOOOODD..........",
+    "..........DDOOOOOOOOOOOOOOOODD..........",
+    "............DDDDDDDDDDDDDDDD............",
+    "............DDDDDDDDDDDDDDDD............",
+    "..........DDDOOOOOOOOOOOOOODDD..........",
+    ".........DDOOOOOOOOOOOOOOOOOODD.........",
+    "...........DDOOOOOOOOOOOOOODD...........",
+    "..........DDOOOOOOOOOOOOOOOODD..........",
+    "..DDAAAAAADDOOOOOOOOOOOOOOOODDAAAAAADD..",
+    ".DDAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAADD.",
+    ".DDAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAADD.",
+    ".DDAAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAADD.",
+    "..KKAAAAAADDOOOOOOOOOOOOOOOODDAAAAAAKK..",
+    "...DDKKKKDDDOOOOOOOOOOOOOOOODDDKKKKDD...",
+    "..........DDOOOOOOOOOOOOOOOODD..........",
+    "..........OOOCCOOOOOOOOOOCCOOO..........",
+    "..........OOOCCOOOOOOOOOOCCOOO..........",
+    "..........OOOOOOOOOOOOOOOOOOOO..........",
+    "...........DDDDDDDDDDDDDDDDDD...........",
+    "............AAAAAAAAAAAAAAAA............",
   ],
 };
 
