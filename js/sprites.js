@@ -177,43 +177,41 @@ const FIRE_IMP_SPRITE = {
   ],
 };
 
-// --- Fire boss (40 wide x 30 tall) — a levitating fire spirit with a ---
-// --- minion-inspired face: round goggle eyes, a strap, yellow skin.  ---
-// D=dark outline/strap  M=yellow face skin  G=goggle rim  W=eye white  K=pupil
-// O=torso fire-orange  A=stubby arm  C=glowing chest crack  R=hover-trail shading  H=horn
+// --- Fire boss (40 wide x 28 tall) — a levitating fire spirit whose face ---
+// --- matches its own fire-imp minions: orange skin, flat yellow block   ---
+// --- eyes with black pupils, a solid red mouth, a flame tuft on top.    ---
+// D=dark outline  O=fire-orange skin/body  Y=eye  K=pupil  R=mouth/hover-trail
+// A=stubby arm  C=glowing chest crack  F=flame tuft
 const FIRE_BOSS_SPRITE = {
   scale: 4,
   colors: {
     D: "#4a0f08",
-    M: "#f7d842",
-    G: "#c8c8c8",
-    W: "#ffffff",
-    K: "#0a0a0a",
     O: "#e8551a",
+    Y: "#ffe34a",
+    K: "#0a0a0a",
+    R: "#b8241a",
     A: "#c8431a",
     C: "#ffb347",
-    R: "#b8241a",
-    H: "#1a0d05",
+    F: "#ffcf4a",
   },
   pixels: [
-    "...HHH............................HHH...",
-    "...HHH............................HHH...",
+    "...FFF............................FFF...",
+    "..FFFFF..........................FFFFF..",
     ".......DDDDDDDDDDDDDDDDDDDDDDDDDD.......",
-    ".....DDMMMMMMMMMMMMMMMMMMMMMMMMMMDD.....",
-    "....DMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMD....",
-    "....DMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMD....",
-    "....DMMMMMMDDDDDDDDDDDDDDDDDDMMMMMMD....",
-    "....DMMMMMGGGGGGGGGDDGGGGGGGGGMMMMMD....",
-    "....DMMMMMGWWWWWWGGDDGGWWWWWWGMMMMMD....",
-    "....DMMMMMGWWWKKWWGDDGWWKKWWWGMMMMMD....",
-    "....DMMMMMGWWWKKWWGDDGWWKKWWWGMMMMMD....",
-    "....DMMMMMGWWWWWWGGDDGGWWWWWWGMMMMMD....",
-    "....DMMMMMGGGGGGGGGDDGGGGGGGGGMMMMMD....",
-    "....DMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMD....",
-    "....DMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMD....",
-    "....DMMMMMMMMMDDDMMMMMMDDDMMMMMMMMMD....",
+    ".....DDOOOOOOOOOOOOOOOOOOOOOOOOOODD.....",
+    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
+    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
+    "....DOOOOOYYYYYYYYOOOOYYYYYYYYOOOOOD....",
+    "....DOOOOOYYYKKYYYOOOOYYYKKYYYOOOOOD....",
+    "....DOOOOOYYYYYYYYOOOOYYYYYYYYOOOOOD....",
+    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
+    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
+    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
+    "....DOOOOOOOORRRRRRRRRRRRRROOOOOOOOD....",
+    "....DOOOOOOOORRRRRRRRRRRRRROOOOOOOOD....",
+    "....DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOD....",
     "......DDDDDDDDDDDDDDDDDDDDDDDDDDDD......",
-    ".........DDDDMMMMMMMMMMMMMMDDDD.........",
+    ".........DDDDOOOOOOOOOOOOOODDDD.........",
     "........DDDOOOOOOOOOOOOOOOOOODDD........",
     ".........DDOOOOOOOOOOOOOOOOOODD.........",
     "........DDOOOOOOOOOOOOOOOOOOOODD........",
@@ -224,8 +222,7 @@ const FIRE_BOSS_SPRITE = {
     "........DOOOCCOOOOOOOOOOOOCCOOOD........",
     "........OOOOOOOOOOOOOOOOOOOOOOOO........",
     ".........DDDDDDDDDD..DDDDDDDDDD.........",
-    "..........RRRRRRRR....RRRRRRRR..........",
-    "...........DDDDDD......DDDDDD...........",
+    "..........AAAAAAAA....AAAAAAAA..........",
   ],
 };
 
