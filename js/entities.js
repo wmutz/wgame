@@ -99,17 +99,25 @@ function drawPlayer(ctx, p, camera) {
 }
 
 // ---------- ENEMY (per-level sprite) ----------
-function createEnemy(x, y, sprite, health, isBoss, speed) {
+// Kept low enough that a standing player's bullets (fired near their waist)
+// still reach a levitating enemy's lower body, even at the bottom of its bob.
+const HOVER_HEIGHT = 12;      // how far a levitating enemy floats above the ground
+const HOVER_BOB_AMPLITUDE = 8; // how far it bobs up/down while hovering
+
+function createEnemy(x, y, sprite, health, isBoss, speed, levitates) {
   const spr = sprite || ALIEN_SPRITE;
   const w = spriteWidth(spr);
   const h = spriteHeight(spr);
   const hp = health || 1;
   const spd = speed || ENEMY_SPEED;
+  const groundY = y - h;              // y is the feet, so subtract height
+  const baseY = levitates ? groundY - HOVER_HEIGHT : groundY;
   return {
     kind: "enemy",
     sprite: spr,
     x: x - w / 2,            // x in level data is the center
-    y: y - h,                // y is the feet, so subtract height
+    y: baseY,
+    baseY,
     w, h,
     vx: -spd,
     vy: 0,
@@ -118,20 +126,31 @@ function createEnemy(x, y, sprite, health, isBoss, speed) {
     maxHealth: hp,
     isBoss: !!isBoss,
     speed: spd,
+    levitates: !!levitates,
+    hoverSeed: Math.random() * 1000,
     alive: true,
   };
 }
 
 function updateEnemy(e, level, player) {
-  // Gravity
-  e.vy += GRAVITY;
-  if (e.vy > 16) e.vy = 16;
-
   // Chase the player: move toward whichever side they're on.
   let desiredVx = 0;
   if (player && player.alive) {
     desiredVx = (player.x + player.w / 2 > e.x + e.w / 2) ? e.speed : -e.speed;
   }
+
+  if (e.levitates) {
+    // Flying enemies ignore gravity and the ground; they just hover and bob.
+    e.vx = desiredVx;
+    e.vy = 0;
+    moveAndCollide(e, level.platforms);
+    e.y = e.baseY + Math.sin((frameCount + e.hoverSeed) * 0.05) * HOVER_BOB_AMPLITUDE;
+    return;
+  }
+
+  // Gravity
+  e.vy += GRAVITY;
+  if (e.vy > 16) e.vy = 16;
 
   // Don't chase off a platform edge: peek ahead at our feet before moving.
   if (e.onGround && desiredVx !== 0) {
@@ -152,8 +171,25 @@ function updateEnemy(e, level, player) {
 }
 
 function drawEnemy(ctx, e, camera) {
+  if (e.levitates) drawHoverGlow(ctx, e, camera);
   drawSprite(ctx, e.sprite, e.x - camera.x, e.y - camera.y, e.vx > 0);
   if (e.isBoss) drawBossHealthBar(ctx, e, camera);
+}
+
+function drawHoverGlow(ctx, e, camera) {
+  const cx = e.x - camera.x + e.w / 2;
+  const cy = e.y - camera.y + e.h + 6;
+  const pulse = 0.75 + Math.sin((frameCount + e.hoverSeed) * 0.15) * 0.25;
+  const rx = (e.w * 0.4) * pulse;
+  const ry = 8 * pulse;
+  ctx.fillStyle = "rgba(255, 140, 40, 0.35)";
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, rx * 1.6, ry * 1.6, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255, 200, 90, 0.55)";
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 function drawBossHealthBar(ctx, e, camera) {
