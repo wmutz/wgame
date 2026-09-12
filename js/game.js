@@ -428,19 +428,24 @@ function drawCutscene() {
   }
 
   // The destination planet, growing as we approach.
+  const destX = canvas.width - 90;
+  const destY = canvas.height - 110;
   const destR = 16 + 90 * progress;
   ctx.fillStyle = cutsceneNext.groundColor;
   ctx.beginPath();
-  ctx.arc(canvas.width - 90, canvas.height - 110, destR, 0, Math.PI * 2);
+  ctx.arc(destX, destY, destR, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = cutsceneNext.groundEdge;
   ctx.beginPath();
-  ctx.arc(canvas.width - 90 - destR * 0.3, canvas.height - 110 - destR * 0.3, destR * 0.35, 0, Math.PI * 2);
+  ctx.arc(destX - destR * 0.3, destY - destR * 0.3, destR * 0.35, 0, Math.PI * 2);
   ctx.fill();
 
-  // The rocket ship, bobbing gently as it flies.
+  // The rocket ship, bobbing gently as it flies, nose pointed at the destination planet.
   const bob = Math.sin(frameCount * 0.12) * 8;
-  drawRocketShip(canvas.width / 2 - 20, canvas.height / 2 - 50 + bob);
+  const shipCenterX = canvas.width / 2;
+  const shipCenterY = canvas.height / 2 - 15 + bob;
+  const shipAngle = Math.atan2(destY - shipCenterY, destX - shipCenterX);
+  drawRocketShip(shipCenterX, shipCenterY, shipAngle);
 
   // Text.
   ctx.fillStyle = "#ffffff";
@@ -454,50 +459,58 @@ function drawCutscene() {
   ctx.textAlign = "left";
 }
 
-function drawRocketShip(x, y) {
+// Draws the ship centered at (cx, cy), rotated so its nose points along `angle`
+// (a Math.atan2-style angle in radians, 0 = pointing right, -PI/2 = pointing up).
+function drawRocketShip(cx, cy, angle) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(angle + Math.PI / 2); // shape below is drawn nose-up by default
+
   // Flickering engine flame.
   const flicker = 10 + Math.sin(frameCount * 0.8) * 4;
   ctx.fillStyle = "#ffb347";
   ctx.beginPath();
-  ctx.moveTo(x, y + 70);
-  ctx.lineTo(x + 20, y + 70 + flicker);
-  ctx.lineTo(x + 40, y + 70);
+  ctx.moveTo(-20, 35);
+  ctx.lineTo(0, 35 + flicker);
+  ctx.lineTo(20, 35);
   ctx.closePath();
   ctx.fill();
 
   // Body.
   ctx.fillStyle = "#e8e8f0";
   ctx.beginPath();
-  ctx.moveTo(x + 20, y);
-  ctx.lineTo(x + 40, y + 70);
-  ctx.lineTo(x, y + 70);
+  ctx.moveTo(0, -35);
+  ctx.lineTo(20, 35);
+  ctx.lineTo(-20, 35);
   ctx.closePath();
   ctx.fill();
 
   // Fins.
   ctx.fillStyle = "#d63a3a";
   ctx.beginPath();
-  ctx.moveTo(x, y + 50);
-  ctx.lineTo(x - 14, y + 70);
-  ctx.lineTo(x, y + 70);
+  ctx.moveTo(-20, 15);
+  ctx.lineTo(-34, 35);
+  ctx.lineTo(-20, 35);
   ctx.closePath();
   ctx.fill();
   ctx.beginPath();
-  ctx.moveTo(x + 40, y + 50);
-  ctx.lineTo(x + 54, y + 70);
-  ctx.lineTo(x + 40, y + 70);
+  ctx.moveTo(20, 15);
+  ctx.lineTo(34, 35);
+  ctx.lineTo(20, 35);
   ctx.closePath();
   ctx.fill();
 
   // Window with the player's helmet visor peeking out.
   ctx.fillStyle = "#a4a8b8";
   ctx.beginPath();
-  ctx.arc(x + 20, y + 30, 11, 0, Math.PI * 2);
+  ctx.arc(0, -5, 11, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#1d3f7a";
   ctx.beginPath();
-  ctx.arc(x + 20, y + 30, 8, 0, Math.PI * 2);
+  ctx.arc(0, -5, 8, 0, Math.PI * 2);
   ctx.fill();
+
+  ctx.restore();
 }
 
 // ---------- BOOT ----------
