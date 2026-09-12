@@ -181,7 +181,7 @@ const FIRE_IMP_SPRITE = {
 // D=dark red outline  O=orange body  R=brow shading  A=darker arm plating
 // Y=eye glow  K=pupil/claws  W=teeth  C=glowing lava crack  H=horn
 const FIRE_BOSS_SPRITE = {
-  scale: 3.5,
+  scale: 5,
   colors: {
     D: "#4a0f08",
     O: "#e8551a",
