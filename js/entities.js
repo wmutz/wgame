@@ -132,10 +132,14 @@ function createEnemy(x, y, sprite, health, isBoss, speed, levitates) {
   };
 }
 
-function updateEnemy(e, level, player) {
+function updateEnemy(e, level, player, camera) {
+  // Only chase once the player can actually see them on screen — otherwise
+  // just sit idle (or, for a levitator, keep hovering in place).
+  const onScreen = !camera || (e.x + e.w > camera.x && e.x < camera.x + canvas.width);
+
   // Chase the player: move toward whichever side they're on.
   let desiredVx = 0;
-  if (player && player.alive) {
+  if (onScreen && player && player.alive) {
     desiredVx = (player.x + player.w / 2 > e.x + e.w / 2) ? e.speed : -e.speed;
   }
 

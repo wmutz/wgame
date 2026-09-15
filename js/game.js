@@ -94,7 +94,7 @@ function update() {
     const input = readInput();
     updatePlayer(player, currentLevel, input);
 
-    for (const e of enemies) if (e.alive) updateEnemy(e, currentLevel, player);
+    for (const e of enemies) if (e.alive) updateEnemy(e, currentLevel, player, camera);
     for (const b of bullets) if (b.alive) updateBullet(b, currentLevel);
 
     // Bullet vs enemy
